@@ -12,15 +12,15 @@ def compute_resume_scores(resume_features_list, jd_features, top_resumes):
         score = 0.0
         role_sim = cosine_similarity(resume["role_vector"], jd_features["role_vector"])[0][0]
         print("role: ", role_sim)
-        score += role_sim * 0.25
+        score += role_sim * 0.2595
 
         skills_sim = cosine_similarity(resume["skills_vector"], jd_features["skills_vector"])[0][0]
         print("skills: ", skills_sim)
-        score += skills_sim * 0.30
+        score += skills_sim * 0.3399
 
         exp_sim = cosine_similarity(resume["experience_vector"], jd_features["experience_vector"])[0][0]
         print("exp: ", exp_sim)
-        score += exp_sim * 0.30
+        score += exp_sim * 0.2968
 
         resume_exp_str = resume.get("years_of_experience", "")
         resume_months = extract_year_resume(resume_exp_str)
@@ -36,7 +36,7 @@ def compute_resume_scores(resume_features_list, jd_features, top_resumes):
         else:
             years_score = max_jd_months / resume_months
 
-        score += years_score * 0.15
+        score += years_score * 0.1038
 
         results.append({
             "id": resume['id'],

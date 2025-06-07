@@ -21,11 +21,11 @@ def compute_resume_scores_crossencoder(resume_info, jd_row, top_resumes):
         score = 0.0
 
         role_score = get_crossencoder_score((str(resume.get("role", "")), jd_role))
-        score += role_score * 0.25
+        score += role_score * 0.2595
 
         resume_combined = f"{resume.get('topSkills', '')}. {resume.get('experience', '')}"
         combined_score = get_crossencoder_score((resume_combined, jd_combined))
-        score += combined_score * 0.60
+        score += combined_score * (0.3399+0.2968)
 
         resume_exp_str = resume.get("yearOfExperience", "")
         resume_months = extract_year_resume(resume_exp_str)
@@ -41,7 +41,7 @@ def compute_resume_scores_crossencoder(resume_info, jd_row, top_resumes):
         else:
             years_score = max_jd_months / resume_months
 
-        score += years_score * 0.15
+        score += years_score * 0.1038
 
         results.append({
             "id": resume.get("sessionId"),
