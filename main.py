@@ -2,13 +2,15 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any
-
+from apscheduler.schedulers.background import BackgroundScheduler
 from ranking import compute_resume_scores
 from re_ranking import compute_resume_scores_crossencoder
 from util import verify_token
 from extract_feature_tfidf import extract_feature
+from crawl_pipeline import Crawl_Pipeline
 
 app = FastAPI()
+crawl_pipeline = Crawl_Pipeline()
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,6 +19,24 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(
+    crawl_pipeline.process_crawl_pdf,
+    trigger='cron',
+    hour=0,
+    minute=0,
+    id='daily_job'
+)
+scheduler.add_job(
+    crawl_pipeline.process_crawl_profile,
+    trigger='cron',
+    day_of_week='mon',
+    hour=0,
+    minute=0,
+    id='weekly_job'
+)
+scheduler.start()
 
 @app.get('/')
 def hello():
