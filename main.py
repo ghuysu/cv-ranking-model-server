@@ -8,6 +8,7 @@ from re_ranking import compute_resume_scores_crossencoder
 from util import verify_token
 from extract_feature_tfidf import extract_feature
 from crawl_pipeline import Crawl_Pipeline
+from update_vocal import update_vocabs
 
 app = FastAPI()
 crawl_pipeline = Crawl_Pipeline()
@@ -35,6 +36,14 @@ scheduler.add_job(
     hour=0,
     minute=0,
     id='weekly_job'
+)
+scheduler.add_job(
+    update_vocabs,
+    trigger='cron',
+    day_of_week='mon',
+    hour=0,
+    minute=0,
+    id='monthly_job'
 )
 scheduler.start()
 
