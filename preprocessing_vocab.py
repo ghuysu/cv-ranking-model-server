@@ -13,9 +13,17 @@ nlp = spacy.load("en_core_web_sm")
 
 
 # Download necessary resources
-nltk.download('stopwords')
-nltk.download('wordnet')
-nltk.download('punkt')
+resources = {
+    'punkt': 'tokenizers/punkt',
+    'punkt_tab': 'tokenizers/punkt_tab',  # Thêm dòng này
+    'stopwords': 'corpora/stopwords',
+    'wordnet': 'corpora/wordnet'
+}
+for res, path in resources.items():
+    try:
+        nltk.data.find(path)
+    except LookupError:
+        nltk.download(res)
 
 # Initialize NLP tools
 stop_words = set(stopwords.words('english'))
